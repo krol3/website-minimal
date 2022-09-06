@@ -24,6 +24,8 @@ WORKDIR /usr/share/nginx/html
 
 # Copy static assets from builder stage
 COPY --from=build-deps /usr/src/app/build .
-
 # Containers run nginx with global directives and daemon off
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+COPY entrypoint.sh /usr
+RUN chmod +x /usr/entrypoint.sh
+ENTRYPOINT ["/bin/sh","/usr/entrypoint.sh"]
